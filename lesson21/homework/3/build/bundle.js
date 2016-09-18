@@ -46,56 +46,149 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _react = __webpack_require__(1);
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(158);
 
-	var _react2 = _interopRequireDefault(_react);
+	var Input = React.createClass({
+	  displayName: 'Input',
 
-	var _reactDom = __webpack_require__(158);
+	  getInitialState: function getInitialState() {
+	    return {
+	      validationStarted: false
+	    };
+	  },
 
-	var _reactDom2 = _interopRequireDefault(_reactDom);
+	  prepareToValidate: function prepareToValidate() {},
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	  componentWillMount: function componentWillMount() {
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	    var startValidation = function () {
+	      this.setState({
+	        validationStarted: true
+	      });
+	    }.bind(this);
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	    startValidation();
+	  },
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Add = function (_React$Component) {
-	  _inherits(Add, _React$Component);
-
-	  function Add() {
-	    _classCallCheck(this, Add);
-
-	    return _possibleConstructorReturn(this, (Add.__proto__ || Object.getPrototypeOf(Add)).apply(this, arguments));
-	  }
-
-	  _createClass(Add, [{
-	    key: 'render',
-	    value: function render() {
-	      var number1, number2;
-	      if (this.props.mode) {
-	        number1 = this.props.num1;
-	        number2 = this.props.num2;
-	      } else {
-	        number1 = this.props.num1.toString();
-	        number2 = this.props.num2.toString();
-	      }
-	      return _react2.default.createElement(
-	        'h1',
-	        null,
-	        number1 + number2
-	      );
+	  handleChange: function handleChange(e) {
+	    if (!this.state.validationStarted) {
+	      this.prepareToValidate();
 	    }
-	  }]);
+	    this.props.onChange && this.props.onChange(e);
+	  },
 
-	  return Add;
-	}(_react2.default.Component);
+	  render: function render() {
+	    var className = "";
+	    if (this.state.validationStarted) {
+	      className = this.props.valid ? "valid" : "invalid";
+	    }
 
-	_reactDom2.default.render(_react2.default.createElement(Add, { num1: 2, num2: 4, mode: false }), document.getElementById('container'));
+	    return React.createElement('input', _extends({}, this.props, {
+	      className: className,
+	      onChange: this.handleChange }));
+	  }
+	});
+
+	var App = React.createClass({
+	  displayName: 'App',
+
+
+	  getInitialState: function getInitialState() {
+	    return { name: "", email: "", phone: "", message: "" };
+	  },
+	  handleChange: function handleChange(e) {
+	    this.setState({
+	      name: e.target.value
+	    });
+	  },
+	  handleemailChange: function handleemailChange(e) {
+	    this.setState({
+	      email: e.target.value
+	    });
+	  },
+	  handlePhoneChange: function handlePhoneChange(e) {
+	    this.setState({
+	      phone: e.target.value
+	    });
+	  },
+	  handleMessageChange: function handleMessageChange(e) {
+	    this.setState({
+	      message: e.target.value
+	    });
+	  },
+	  validate: function validate(state) {
+	    return {
+	      name: /^[a-zA-Z]+$/.test(state.name),
+	      email: /.+@.+\..+/.test(state.email),
+	      phone: /^[0-9]+$/.test(state.phone),
+	      message: /.{20,}/.test(state.message)
+	    };
+	  },
+	  render: function render() {
+	    var valid = this.validate(this.state);
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'p',
+	          null,
+	          'Enter name(only characters)'
+	        ),
+	        React.createElement(Input, { valid: valid.name,
+	          value: this.state.name,
+	          onChange: this.handleChange,
+	          placeholder: 'only character' })
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'p',
+	          null,
+	          'Enter email(ee@ss.ss)'
+	        ),
+	        React.createElement(Input, { valid: valid.email,
+	          value: this.state.email,
+	          onChange: this.handleemailChange,
+	          placeholder: 'ee@ss.ss' })
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'p',
+	          null,
+	          'Enter phone(only numbers)'
+	        ),
+	        React.createElement(Input, { valid: valid.phone,
+	          value: this.state.phone,
+	          onChange: this.handlePhoneChange,
+	          placeholder: 'only number' })
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'p',
+	          null,
+	          'Enter message(more than 20 symbols)'
+	        ),
+	        React.createElement(Input, { valid: valid.message,
+	          value: this.state.message,
+	          onChange: this.handleMessageChange,
+	          placeholder: 'More than 20 symbols' })
+	      )
+	    );
+	  }
+	});
+
+	ReactDOM.render(React.createElement(App, null), document.getElementById('container'));
 
 /***/ },
 /* 1 */
@@ -8106,6 +8199,10 @@
 	  }
 	};
 
+	function registerNullComponentID() {
+	  ReactEmptyComponentRegistry.registerNullComponentID(this._rootNodeID);
+	}
+
 	var ReactEmptyComponent = function ReactEmptyComponent(instantiate) {
 	  this._currentElement = null;
 	  this._rootNodeID = null;
@@ -8114,7 +8211,7 @@
 	assign(ReactEmptyComponent.prototype, {
 	  construct: function construct(element) {},
 	  mountComponent: function mountComponent(rootID, transaction, context) {
-	    ReactEmptyComponentRegistry.registerNullComponentID(rootID);
+	    transaction.getReactMountReady().enqueue(registerNullComponentID, this);
 	    this._rootNodeID = rootID;
 	    return ReactReconciler.mountComponent(this._renderedComponent, rootID, transaction, context);
 	  },
@@ -18863,7 +18960,7 @@
 
 	'use strict';
 
-	module.exports = '0.14.7';
+	module.exports = '0.14.8';
 
 /***/ },
 /* 147 */

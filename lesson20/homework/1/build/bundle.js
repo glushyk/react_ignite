@@ -46,8 +46,6 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -58,44 +56,64 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	var List = _react2.default.createClass({
+	  displayName: 'List',
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	  getInitialState: function getInitialState() {
+	    return {
+	      input: undefined
+	    };
+	  },
 
-	var Add = function (_React$Component) {
-	  _inherits(Add, _React$Component);
+	  hendler: function hendler(e) {
+	    this.setState({ input: e.target.value });
+	  },
 
-	  function Add() {
-	    _classCallCheck(this, Add);
+	  render: function render() {
 
-	    return _possibleConstructorReturn(this, (Add.__proto__ || Object.getPrototypeOf(Add)).apply(this, arguments));
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement('input', { type: 'number', onChange: this.hendler, placeholder: 'Enter value here' }),
+	      _react2.default.createElement(Child, { itemNum: this.state.input })
+	    );
 	  }
+	});
 
-	  _createClass(Add, [{
-	    key: 'render',
-	    value: function render() {
-	      var number1, number2;
-	      if (this.props.mode) {
-	        number1 = this.props.num1;
-	        number2 = this.props.num2;
-	      } else {
-	        number1 = this.props.num1.toString();
-	        number2 = this.props.num2.toString();
-	      }
-	      return _react2.default.createElement(
-	        'h1',
+	var Child = _react2.default.createClass({
+	  displayName: 'Child',
+
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      list: [{ name: "Anne Montgomery", gender: "Female" }, { name: "Annie George", gender: "Female" }, { name: "Gary Butler", gender: "Male" }, { name: "Lisa Mendoza", gender: "Female" }, { name: "Marilyn Henry", gender: "Female" }, { name: "Johnny Tucker", gender: "Male" }, { name: "Chris Jacobs", gender: "Male" }, { name: "Benjamin James", gender: "Male" }]
+	    };
+	  },
+
+	  render: function render() {
+	    var result = [];
+
+	    for (var i = 0; i < this.props.itemNum; i++) {
+	      if (this.props.itemNum > this.props.list.length) {
+	        return false;
+	      };
+	      result.push(_react2.default.createElement(
+	        'li',
 	        null,
-	        number1 + number2
-	      );
+	        this.props.list[i].name,
+	        ' ',
+	        this.props.list[i].gender
+	      ));
 	    }
-	  }]);
+	    return _react2.default.createElement(
+	      'ul',
+	      null,
+	      result
+	    );
+	  }
+	});
 
-	  return Add;
-	}(_react2.default.Component);
-
-	_reactDom2.default.render(_react2.default.createElement(Add, { num1: 2, num2: 4, mode: false }), document.getElementById('container'));
+	_reactDom2.default.render(_react2.default.createElement(List, null), document.getElementById('container'));
 
 /***/ },
 /* 1 */

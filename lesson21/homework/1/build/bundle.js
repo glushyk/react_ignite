@@ -46,56 +46,51 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(158);
 
-	var _react = __webpack_require__(1);
+	var Counter = React.createClass({
+	    displayName: 'Counter',
 
-	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDom = __webpack_require__(158);
+	    getInitialState: function getInitialState() {
+	        return {
+	            counter: 0
+	        };
+	    },
 
-	var _reactDom2 = _interopRequireDefault(_reactDom);
+	    inc: function inc() {
+	        this.setState({ counter: this.state.counter + 1 });
+	    },
+	    dec: function dec() {
+	        this.setState({ counter: this.state.counter - 1 });
+	    },
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Add = function (_React$Component) {
-	  _inherits(Add, _React$Component);
-
-	  function Add() {
-	    _classCallCheck(this, Add);
-
-	    return _possibleConstructorReturn(this, (Add.__proto__ || Object.getPrototypeOf(Add)).apply(this, arguments));
-	  }
-
-	  _createClass(Add, [{
-	    key: 'render',
-	    value: function render() {
-	      var number1, number2;
-	      if (this.props.mode) {
-	        number1 = this.props.num1;
-	        number2 = this.props.num2;
-	      } else {
-	        number1 = this.props.num1.toString();
-	        number2 = this.props.num2.toString();
-	      }
-	      return _react2.default.createElement(
-	        'h1',
-	        null,
-	        number1 + number2
-	      );
+	    render: function render() {
+	        return React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	                'h1',
+	                null,
+	                'Current: ',
+	                this.state.counter
+	            ),
+	            React.createElement(
+	                'button',
+	                { onClick: this.inc },
+	                '+'
+	            ),
+	            React.createElement(
+	                'button',
+	                { onClick: this.dec },
+	                '-'
+	            )
+	        );
 	    }
-	  }]);
+	});
 
-	  return Add;
-	}(_react2.default.Component);
-
-	_reactDom2.default.render(_react2.default.createElement(Add, { num1: 2, num2: 4, mode: false }), document.getElementById('container'));
+	ReactDOM.render(React.createElement(Counter, null), document.getElementById('container'));
 
 /***/ },
 /* 1 */
@@ -8106,6 +8101,10 @@
 	  }
 	};
 
+	function registerNullComponentID() {
+	  ReactEmptyComponentRegistry.registerNullComponentID(this._rootNodeID);
+	}
+
 	var ReactEmptyComponent = function ReactEmptyComponent(instantiate) {
 	  this._currentElement = null;
 	  this._rootNodeID = null;
@@ -8114,7 +8113,7 @@
 	assign(ReactEmptyComponent.prototype, {
 	  construct: function construct(element) {},
 	  mountComponent: function mountComponent(rootID, transaction, context) {
-	    ReactEmptyComponentRegistry.registerNullComponentID(rootID);
+	    transaction.getReactMountReady().enqueue(registerNullComponentID, this);
 	    this._rootNodeID = rootID;
 	    return ReactReconciler.mountComponent(this._renderedComponent, rootID, transaction, context);
 	  },
@@ -18863,7 +18862,7 @@
 
 	'use strict';
 
-	module.exports = '0.14.7';
+	module.exports = '0.14.8';
 
 /***/ },
 /* 147 */
